@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -101,6 +102,22 @@ public class ProductController {
     public List<Product>  testeDeRequetes(@PathVariable int prix) {
 
         return productDao.chercherUnProduitCher(400);
+    }
+
+    // Calcule la marge de chaque produit (différence entre prix d‘achat et prix de vente)
+    @ApiOperation(value = "Calcule la marge de chaque produit (différence entre prix d‘achat et prix de vente)")
+    @GetMapping(value = "/AdminProduits")
+    public LinkedHashMap<String, Integer> calculerMargeProduit() {
+
+        List<Product> products = productDao.findAll();
+        if(products.isEmpty()) throw new ProduitIntrouvableException("Aucun produit trouvé !");
+
+        LinkedHashMap<String, Integer> produitsMarge = new LinkedHashMap<String, Integer>();
+        for (Product product : products) {
+            int marge = product.getPrix() - product.getPrixAchat();
+            produitsMarge.put(product.toString(),marge);
+        }
+        return produitsMarge;
     }
 
 
