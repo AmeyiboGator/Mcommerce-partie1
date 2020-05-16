@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
@@ -118,6 +119,14 @@ public class ProductController {
             produitsMarge.put(product.toString(),marge);
         }
         return produitsMarge;
+    }
+
+    // Retourne la liste de tous les produits triés par nom croissant
+    @ApiOperation(value = "Retourne la liste de tous les produits triés par nom croissant ")
+    @GetMapping(value = "/ProduitsOrdonnes")
+    public List<Product> trierProduitsParOrdreAlphabetique() {
+
+        return productDao.findByOrderByNom();
     }
 
 
